@@ -1,0 +1,215 @@
+rule AllowCustomerToRecources {
+    description: "Grant business network administrators full access to user resources"
+    participant(p): "da.mtn.model.Customer"
+    operation: READ,UPDATE
+    resource(r): "da.mtn.model.BusinessAccount"
+    condition:(p.getIdentifier() === r.owner.getIdentifier())
+    action: ALLOW
+}
+rule AllowCustomerToReadBusinesAcounts {
+    description: "Grant business network administrators full access to user resources"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+rule AllowMechantRegistry{
+    description: "Grant business network administrators full access to user resources"
+    participant(p): "da.mtn.model.Customer"
+    operation: ALL
+    resource(r): "da.mtn.model.MerchantRegistry"
+  	condition:(p.getIdentifier() === r.customer.getIdentifier())
+    action: ALLOW
+}
+
+
+rule AllowCustomerToSwitchStatus{
+    description: "Grant business network administrators full access to user resources"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.SwitchStatus"
+    action: ALLOW
+}
+
+rule AddToMerchantService {
+    description: "AddToMerchantService"
+    participant(p): "da.mtn.model.Customer"
+    operation: ALL
+    resource(r): "da.mtn.model.AddToMerchantServices"
+  	condition:(p.getIdentifier() === r.customer.getIdentifier())
+    action: ALLOW
+}
+
+rule RemoveFromMerchantService {
+    description: "RemoveFromMerchantService"
+    participant(p): "da.mtn.model.Customer"
+    operation: ALL
+    resource(r): "da.mtn.model.RemoveFromMerchantServices"
+  	condition:(p.getIdentifier() === r.service.owner.getIdentifier())
+    action: ALLOW
+}
+
+rule AllowCustomerToTheirProfiles{
+    description: "Allow Customer To Their Profiles"
+    participant(p): "da.mtn.model.Customer"
+    operation: READ,UPDATE
+    resource(r): "da.mtn.model.Customer"
+  	condition: (p.getIdentifier() === r.getIdentifier())
+    action: ALLOW
+}
+
+rule DenyCustomerToOtherProfiles{
+    description: "Deny Customer To Their Profiles"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.Customer"
+    action: DENY
+}
+//da.mtn.model.Customer
+rule AllowCustomerToTheirAccounts{
+    description: "Allow Customer To Their Accounts"
+    participant(p): "da.mtn.model.Customer"
+    operation: READ,UPDATE
+    resource(r): "da.mtn.model.CustomerAccount"
+  	condition: (p.getIdentifier() == r.owner.getIdentifier())
+    action: ALLOW
+}
+
+rule DenyCustomerToCreateAccounts{
+    description: "Deny Customer To Create Accounts"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.CustomerAccount"
+    action: DENY
+}
+
+rule AllowCustomerToAddDesiredService{
+    description: "Allow Customer To Add Desired Service"
+    participant: "da.mtn.model.Customer"
+    operation: CREATE,READ
+    resource: "da.mtn.model.DesiredService"
+    action: ALLOW
+}
+
+rule DenyCustomerToAddDesiredService{
+    description: "Deny Customer To Temper with Desired Service"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.DesiredService"
+    action: DENY
+}
+
+rule AllowMerchantToTheirAccounts{
+    description: "Allow Merchant To Their Accounts"
+    participant(p): "da.mtn.model.Customer"
+    operation: ALL
+    resource(r): "da.mtn.model.BusinessAccount"
+  	condition: (p.getIdentifier() == r.owner.getIdentifier())
+    action: ALLOW
+}
+rule AllowMerchantToAddMechantServices{
+    description: "AllowMechantToAddMerchantServices"
+    participant(p): "da.mtn.model.Customer"
+    operation: CREATE
+    resource: "da.mtn.model.MerchantService"
+ 	condition: (p.type == 'Merchant')
+    action: ALLOW
+}
+
+rule AllowMechantToModifyMechantServices{
+    description: "AllowMerchantToModifyMerchantServices"
+    participant(p): "da.mtn.model.Customer"
+    operation: UPDATE,DELETE,READ
+    resource(r): "da.mtn.model.MerchantService"
+  	condition: (p.getIdentifier() === r.owner.getIdentifier())
+    action: ALLOW
+}
+
+
+rule DenyMechantToOtherMerchantServices{
+    description: "Deny Merchant To Other Accounts"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.MerchantService"
+    action: DENY
+}
+
+rule DenyMerchantToOtherAccounts{
+    description: "Deny Merchant To Other Accounts"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.BusinessAccount"
+    action: DENY
+}
+rule AllowMechantToOtherTheirServices{
+    description: "Deny Merchant To Other Accounts"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.BusinessAccount"
+    action: DENY
+}
+
+
+rule AllowCustomerToMakeTransaction{
+    description: "Allow Customer To Make Transaction"
+    participant(p): "da.mtn.model.Customer"
+    operation: ALL
+    resource(r): "da.mtn.model.BuyFromMerchant"
+  condition:(p.getIdentifier() === r.from.owner.getIdentifier())
+    action: ALLOW
+}
+
+
+rule DenyCustomerToBussinesAccountsTransaction{
+    description: "Allow Customer To Make Other changes to business accounts"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.BusinessAccount"
+    action: DENY
+}
+
+
+
+rule AllowMerchantToSollableServices{
+    description: "Allow Merchant To Sollable Services"
+    participant(r): "da.mtn.model.Customer"
+    operation: READ
+    resource: "da.mtn.model.SellableServices"
+    condition: (r.type == 'Merchant')
+    action: ALLOW
+}
+rule DenyMechantToSollableServices{
+    description: "Deny Merchant Temper Sollable Services"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.SellableServices"
+    action: DENY
+}
+
+
+
+rule  DenyCustomerToOthersAccount{
+    description: "Deny Customer To Others Account"
+    participant: "da.mtn.model.Customer"
+    operation: ALL
+    resource: "da.mtn.model.CustomerAccount"
+    action: DENY
+}
+
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}

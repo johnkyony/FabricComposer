@@ -1,0 +1,509 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server.  You can find out more about\
+    \     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net,\
+    \ #swagger](http://swagger.io/irc/).      For this sample, you can use the api\
+    \ key `special-key` to test the authorization     filters."
+  version: "1.0.0"
+  title: "Swagger Petstore"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "nhlana.2@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:9000"
+basePath: "/"
+tags:
+- name: "user"
+  description: "User apis"
+- name: "transact"
+  description: "Perform transactions apis"
+- name: "services"
+  description: "Services operations apis"
+schemes:
+- "https"
+- "http"
+paths:
+  /user/merchantRegistry/{card}/{mssid}/{changeTo}:
+    post:
+      tags:
+      - "user"
+      summary: "merchantRegistry"
+      description: ""
+      operationId: "merchantRegistry"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "card"
+        in: "path"
+        description: "ticket"
+        required: true
+        type: "string"
+      - name: "changeTo"
+        in: "path"
+        description: "change to merchant or customer"
+        required: true
+        type: "string"
+      - name: "mssid"
+        in: "path"
+        description: "cell"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            properties: {}
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        400:
+          description: "Invalid username/password supplied"
+      x-swagger-router-controller: "User"
+  /user/registration/{mssid}/{id}:
+    post:
+      tags:
+      - "user"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "registration"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "mssid"
+        in: "path"
+        description: "mssid"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            properties: {}
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        400:
+          description: "Invalid username/password supplied"
+      x-swagger-router-controller: "User"
+  /user/login/{mssid}:
+    post:
+      tags:
+      - "user"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "mssid"
+        in: "path"
+        description: "The user name for login"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/login"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        400:
+          description: "Invalid username/password supplied"
+      x-swagger-router-controller: "User"
+  /user/status/switchStatus/{ticket}/{mssid}/{changeTo}:
+    get:
+      tags:
+      - "user"
+      summary: "status enable"
+      description: ""
+      operationId: "enableTicket"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "changeTo"
+        in: "path"
+        description: "switch on or off"
+        required: true
+        type: "string"
+      - name: "ticket"
+        in: "path"
+        description: "user id"
+        required: true
+        type: "string"
+      - name: "mssid"
+        in: "path"
+        description: "user mssid"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "User"
+  /user/balance/{ticket}:
+    get:
+      tags:
+      - "user"
+      summary: "Get balances"
+      description: ""
+      operationId: "getBalances"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ticket"
+        in: "path"
+        description: "ticket"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            properties: {}
+        400:
+          description: "Error"
+      x-swagger-router-controller: "User"
+  /user/logs/{ticket}:
+    get:
+      tags:
+      - "user"
+      summary: "Get logs"
+      description: ""
+      operationId: "getlogs"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ticket"
+        in: "path"
+        description: "user id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/objarr"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "User"
+  /user/PersonalPreferences/{ticket}/{productName}:
+    post:
+      tags:
+      - "user"
+      summary: "what whould a customer preffer Personal Preferences"
+      description: ""
+      operationId: "PersonalPreferences"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ticket"
+        in: "path"
+        description: "user id"
+        required: true
+        type: "string"
+      - name: "productName"
+        in: "path"
+        description: "user id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/objarr"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "User"
+  /transaction/tranfear/{mssid}/{tomssid}/{amount}:
+    post:
+      tags:
+      - "transact"
+      summary: "transfear to an account"
+      description: ""
+      operationId: "transfear"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "mssid"
+        in: "path"
+        description: "from"
+        required: true
+        type: "string"
+      - name: "tomssid"
+        in: "path"
+        description: "to"
+        required: true
+        type: "string"
+      - name: "amount"
+        in: "path"
+        description: "amount"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "Transact"
+  /transaction/redemee/{frommssid}/{tomssid}/{amount}/{serviceID}:
+    post:
+      tags:
+      - "transact"
+      summary: "buy from merchant"
+      description: ""
+      operationId: "redemee"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "frommssid"
+        in: "path"
+        description: "to"
+        required: true
+        type: "string"
+      - name: "tomssid"
+        in: "path"
+        description: "to"
+        required: true
+        type: "string"
+      - name: "amount"
+        in: "path"
+        description: "serviceID"
+        required: true
+        type: "string"
+      - name: "serviceID"
+        in: "path"
+        description: "service ID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "Transact"
+  /services/list/{ticket}:
+    get:
+      tags:
+      - "services"
+      summary: "Get all mtn services list"
+      description: ""
+      operationId: "getservides"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ticket"
+        in: "path"
+        description: "ticket"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/objarr"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "Services"
+  /services/FindMerchantServices/{merchantID}:
+    get:
+      tags:
+      - "services"
+      summary: "mechnat services list"
+      description: ""
+      operationId: "FindMerchantServices"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "merchantID"
+        in: "path"
+        description: "merchantID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/objarr"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "Services"
+  /services/myServiceList/{ticket}:
+    get:
+      tags:
+      - "services"
+      summary: "mechnat services list"
+      description: ""
+      operationId: "mercantserviceslist"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ticket"
+        in: "path"
+        description: "ticket"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/objarr"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "Services"
+  /services/myService/{ticket}/{mssid}/{serviceID}:
+    put:
+      tags:
+      - "services"
+      summary: "Add to mechnat services list"
+      description: ""
+      operationId: "addtoServiceList"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ticket"
+        in: "path"
+        description: "ticket"
+        required: true
+        type: "string"
+      - name: "serviceID"
+        in: "path"
+        description: "service id"
+        required: true
+        type: "string"
+      - name: "mssid"
+        in: "path"
+        description: "mssid"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/objarr"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "Services"
+    delete:
+      tags:
+      - "services"
+      summary: "Remove from mechant service list"
+      description: ""
+      operationId: "removeServiceList"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "mssid"
+        in: "path"
+        description: "mssid"
+        required: true
+        type: "string"
+      - name: "serviceID"
+        in: "path"
+        description: "service id"
+        required: true
+        type: "string"
+      - name: "ticket"
+        in: "path"
+        description: "user id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/objarr"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "Services"
+  /services/serviceLogs/{ticket}:
+    get:
+      tags:
+      - "services"
+      summary: "Get logs"
+      description: ""
+      operationId: "logs"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ticket"
+        in: "path"
+        description: "user id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/objarr"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "Services"
+  /user/userRecomendedServices/{userID}:
+    get:
+      tags:
+      - "user"
+      summary: "user Recomended Services"
+      description: ""
+      operationId: "userRecomendedServices"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userID"
+        in: "path"
+        description: "user id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/objarr"
+        400:
+          description: "Error"
+      x-swagger-router-controller: "User"
+definitions:
+  login:
+    type: "object"
+    properties:
+      ticket:
+        type: "string"
+    example:
+      ticket: "ticket"
+  objarr:
+    type: "array"
+    items:
+      type: "object"
+      properties: {}

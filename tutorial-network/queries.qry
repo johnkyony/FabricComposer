@@ -1,0 +1,48 @@
+/**
+ * New query file
+ */
+
+query CustomerAccountBalance{
+ description: "Select balance"
+  	statement:
+	SELECT da.mtn.model.CustomerAccount
+}
+query BusinessAccountBalance{
+ description: "Select balance"
+  	statement:
+	SELECT da.mtn.model.BusinessAccount
+}
+
+query SelectMerchantServices {
+  description: "Select all merchant service"
+  statement:
+      SELECT da.mtn.model.MerchantService
+          WHERE (owner == _$owner)
+}
+/*
+query Logs{
+ description: "Select balance"
+  	statement:
+	SELECT da.mtn.model.CustomerAccount
+}
+query CuustomerAccountBalance{
+ description: "Select balance"
+  	statement:
+	SELECT da.mtn.model.CustomerAccount
+}
+
+query logs{
+ description: "Select balance"
+  	statement:
+	SELECT org.clp.biznet.Member
+}
+query MTNservicesList{
+ description: "Select balance"
+  	statement:
+	SELECT org.clp.biznet.Member
+}
+query MechantServiceList{
+ description: "Select balance"
+  	statement:
+	SELECT org.clp.biznet.Member
+}*/

@@ -1,0 +1,93 @@
+namespace da.mtn.model
+
+enum Type{
+	o Customer
+    o Merchant
+}
+abstract asset Account identified by accountid{
+	o String accountid
+    o Double points
+    o Double airtime
+    -->Customer owner
+}
+asset CustomerAccount extends Account{}
+
+asset BusinessAccount extends Account{}
+
+asset MerchantService identified by serviceid{
+	o String serviceid
+    o String name 
+    o Double recommendedPrice optional
+    -->SellableServices service
+    -->Customer owner
+}
+
+asset SellableServices identified by serviceid{
+	o String serviceid
+    o String name
+    o Double recommendedPriceInPoints optional
+    o String description
+}
+
+enum Status{
+	o on
+    o off
+}
+
+participant Customer identified by mssid{
+  	
+	o String mssid
+    o String id
+    o Type type
+    o Status status
+}
+
+participant MTNAdmin identified by email{
+	o String email
+}
+
+asset DesiredService identified by serviceid{
+	o String serviceid
+	-->Customer customer
+}
+enum AccountType{
+	o CustomerAccount
+    o BusinessAccount
+}
+transaction CreateAccount{
+	o String accountno
+    o AccountType type
+    -->Customer owner    
+}
+transaction BuyFromMerchant{
+	-->CustomerAccount from
+    -->BusinessAccount to
+    o Double amount
+}
+transaction TransferPoints{
+	-->CustomerAccount from
+    -->CustomerAccount to
+    o Double amount
+}
+enum MechantRegistryOps{
+	o Customer
+    o Merchant
+}
+transaction MerchantRegistry{
+	-->Customer customer
+    o Type type
+    o String accountno
+}
+transaction SwitchStatus{
+	-->Customer customer
+    o Status status
+}
+transaction AddToMerchantServices{
+  	o String serviceid
+	-->Customer customer
+    -->SellableServices service
+}
+
+transaction RemoveFromMerchantServices{
+	-->MerchantService service
+}
